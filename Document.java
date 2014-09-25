@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import org.fife.ui.rtextarea.*;
+import org.fife.ui.rsyntaxtextarea.*;
 
 public class Document extends JFrame implements ActionListener
 {
@@ -20,6 +22,14 @@ public class Document extends JFrame implements ActionListener
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
+
+      RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
+      textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+      textArea.setCodeFoldingEnabled(true);
+      RTextScrollPane sp = new RTextScrollPane(textArea);
+      pane.add(sp);
+
+
 
         count = 0;
         pad = " ";
@@ -65,7 +75,7 @@ public class Document extends JFrame implements ActionListener
     pasteI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
     selectI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
 
-    pane.add(scpane,BorderLayout.CENTER);
+  
     pane.add(toolBar,BorderLayout.SOUTH);
 
     saveI.addActionListener(this);
