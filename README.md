@@ -3,6 +3,7 @@ Text-Editor-in-Java
 
 Text Editor in Java with syntax highlighting using RSyntaxTextArea 
 
+![Screenshot](http://i.imgur.com/0J4rqNR.png)
 
 
 Compling the code
