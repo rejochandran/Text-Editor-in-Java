@@ -7,6 +7,7 @@ import java.io.*;
 
 public class Document extends JFrame implements ActionListener
 {
+         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
      JFileChooser fc = new JFileChooser();
     private JTextArea ta;
     private int count;
@@ -27,7 +28,7 @@ public class Document extends JFrame implements ActionListener
 
 
 
-      RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
+ 
       textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
       textArea.setCodeFoldingEnabled(true);
       RTextScrollPane sp = new RTextScrollPane(textArea);
@@ -58,13 +59,13 @@ public class Document extends JFrame implements ActionListener
     menuBar.add(editM);
 
     fileM.add(saveI);
-    fileM.add(loadI);
+   
     fileM.add(exitI);
 
-    editM.add(cutI);
-    editM.add(copyI);
-    editM.add(pasteI);        
-    editM.add(selectI);
+    // editM.add(cutI);
+    // editM.add(copyI);
+    // editM.add(pasteI);        
+    // editM.add(selectI);
 
 
     saveI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
@@ -92,7 +93,7 @@ void writetofile(File ff) throws Exception
 {
             FileWriter fw = new FileWriter(ff.getAbsoluteFile());
                  BufferedWriter bw = new BufferedWriter(fw);
-                 bw.write("works!!!");
+                 bw.write(textArea.getText());
                  bw.close(); 
 }
 
@@ -108,7 +109,7 @@ public void actionPerformed(ActionEvent e)
                 try
                 {
                  File file = fc.getSelectedFile();
-                 //writetofile();
+                 writetofile(file);
              }
              catch(Exception esa)
              {
