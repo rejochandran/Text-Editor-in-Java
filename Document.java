@@ -11,14 +11,14 @@ public class Document extends JFrame implements ActionListener
     private JTextArea ta;
     private int count;
     private JMenuBar menuBar;
-    private JMenu fileM,editM,viewM;
+    private JMenu fileM,editM;
     private JScrollPane scpane;
-    private JMenuItem exitI,cutI,copyI,pasteI,selectI,saveI,loadI,statusI;
+    private JMenuItem exitI,cutI,copyI,pasteI,selectI,saveI,loadI;
     private String pad;
     private JToolBar toolBar;
     public Document()
     {
-        super("Java editor by CSE 2016");
+        super("Text Editor");
         setSize(600, 600);
         setLocationRelativeTo(null); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,7 +40,6 @@ public class Document extends JFrame implements ActionListener
     menuBar = new JMenuBar(); //menubar
     fileM = new JMenu("File"); //file menu
     editM = new JMenu("Edit"); //edit menu
-    viewM = new JMenu("View"); //edit menu
     scpane = new JScrollPane(ta); //scrollpane  and add textarea to scrollpane
     exitI = new JMenuItem("Exit");
     cutI = new JMenuItem("Cut");
@@ -49,7 +48,6 @@ public class Document extends JFrame implements ActionListener
     selectI = new JMenuItem("Select All"); //menuitems
     saveI = new JMenuItem("Save"); //menuitems
     loadI = new JMenuItem("Load"); //menuitems
-    statusI = new JMenuItem("Status"); //menuitems
     toolBar = new JToolBar();
 
     ta.setLineWrap(true);
@@ -58,7 +56,6 @@ public class Document extends JFrame implements ActionListener
     setJMenuBar(menuBar);
     menuBar.add(fileM);
     menuBar.add(editM);
-    menuBar.add(viewM);
 
     fileM.add(saveI);
     fileM.add(loadI);
@@ -69,7 +66,6 @@ public class Document extends JFrame implements ActionListener
     editM.add(pasteI);        
     editM.add(selectI);
 
-    viewM.add(statusI);
 
     saveI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
     loadI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
@@ -88,7 +84,7 @@ public class Document extends JFrame implements ActionListener
     copyI.addActionListener(this);
     pasteI.addActionListener(this);
     selectI.addActionListener(this);
-    statusI.addActionListener(this);
+   
 
     setVisible(true);
 }
@@ -136,10 +132,6 @@ public void actionPerformed(ActionEvent e)
         ta.insert(pad, ta.getCaretPosition());
     else if (choice == selectI)
         ta.selectAll();
-    else if (e.getSource() == statusI)
-    {
-        //not yet implmented
-    }
 }
 public static void main(String[] args) 
 {
