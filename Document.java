@@ -7,131 +7,103 @@ import java.io.*;
 
 public class Document extends JFrame implements ActionListener
 {
-         RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
-     JFileChooser fc = new JFileChooser();
-    private JTextArea ta;
-    private int count;
-    private JMenuBar menuBar;
-    private JMenu fileM;
-    private JScrollPane scpane;
-    private JMenuItem exitI,cutI,copyI,pasteI,selectI,saveI,loadI;
-    private String pad;
-    private JToolBar toolBar;
-    public Document()
-    {
-        super("Text Editor");
-        setSize(600, 600);
-        setLocationRelativeTo(null); 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Container pane = getContentPane();
-        pane.setLayout(new BorderLayout());
-
-
-
- 
-      textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-      textArea.setCodeFoldingEnabled(true);
-      RTextScrollPane sp = new RTextScrollPane(textArea);
-      pane.add(sp);
-
-
-        count = 0;
-        pad = " ";
-    ta = new JTextArea(); //textarea
-    menuBar = new JMenuBar(); //menubar
-    fileM = new JMenu("File"); //file menu
     
-    scpane = new JScrollPane(ta); //scrollpane  and add textarea to scrollpane
-    exitI = new JMenuItem("Exit");
-    cutI = new JMenuItem("Cut");
-    copyI = new JMenuItem("Copy");
-    pasteI = new JMenuItem("Paste");
-    selectI = new JMenuItem("Select All"); //menuitems
-    saveI = new JMenuItem("Save"); //menuitems
-    loadI = new JMenuItem("Load"); //menuitems
-    toolBar = new JToolBar();
+RSyntaxTextArea textArea = new RSyntaxTextArea(20, 60);
 
-    ta.setLineWrap(true);
-    ta.setWrapStyleWord(true);
+JFileChooser fc = new JFileChooser();
 
-    setJMenuBar(menuBar);
-    menuBar.add(fileM);
-    
+private JTextArea ta;
+private int count;
+private JMenuBar menuBar;
+private JMenu fileM;
+private JMenuItem exitI,saveI;
+private String pad;
+private JToolBar toolBar;
 
-    fileM.add(saveI);
-   
-    fileM.add(exitI);
+public Document()
+{
 
+super("Text Editor");
+setSize(600, 600);
+setLocationRelativeTo(null); 
+setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+Container pane = getContentPane();
+pane.setLayout(new BorderLayout());
 
-    saveI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-    loadI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
-    cutI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
-    copyI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
-    pasteI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
-    selectI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+textArea.setCodeFoldingEnabled(true);
+RTextScrollPane sp = new RTextScrollPane(textArea);
+pane.add(sp);
 
-  
-    pane.add(toolBar,BorderLayout.SOUTH);
+count = 0;
+pad = " ";
+ta = new JTextArea(); //textarea
 
-    saveI.addActionListener(this);
-    loadI.addActionListener(this);
-    exitI.addActionListener(this);
-    cutI.addActionListener(this);
-    copyI.addActionListener(this);
-    pasteI.addActionListener(this);
-    selectI.addActionListener(this);
-   
+menuBar = new JMenuBar(); //menubar
+fileM = new JMenu("File"); //file menu
+exitI = new JMenuItem("Exit");  //menu items on File Menu
+saveI = new JMenuItem("Save");  //menu items on File Menu
+toolBar = new JToolBar();
 
-    setVisible(true);
+ta.setLineWrap(true);
+ta.setWrapStyleWord(true);
+
+setJMenuBar(menuBar);
+menuBar.add(fileM); // "FILE" on the menu bar
+fileM.add(saveI); // "Save" on the menu item for FILE
+fileM.add(exitI); // "Exit" on the menu item for FILE
+
+saveI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+
+pane.add(toolBar,BorderLayout.SOUTH);
+
+saveI.addActionListener(this);
+exitI.addActionListener(this);
+
+setVisible(true);
+
 }
+
 void writetofile(File ff) throws Exception
 {
-            FileWriter fw = new FileWriter(ff.getAbsoluteFile());
-                 BufferedWriter bw = new BufferedWriter(fw);
-                 bw.write(textArea.getText());
-                 bw.close(); 
+        FileWriter fw = new FileWriter(ff.getAbsoluteFile());
+             BufferedWriter bw = new BufferedWriter(fw);
+             bw.write(textArea.getText());
+             bw.close(); 
 }
 
 public void actionPerformed(ActionEvent e) 
 {
-    JMenuItem choice = (JMenuItem) e.getSource();
-    if (choice == saveI)
+
+JMenuItem choice = (JMenuItem) e.getSource();
+
+if (choice == saveI)
+{
+
+ int returnVal = fc.showSaveDialog(Document.this);
+
+    if (returnVal == JFileChooser.APPROVE_OPTION) 
     {
-        
-         int returnVal = fc.showSaveDialog(Document.this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) 
-            {
-                try
-                {
-                 File file = fc.getSelectedFile();
-                 writetofile(file);
-             }
-             catch(Exception esa)
-             {
+        try
+        {
+         File file = fc.getSelectedFile();
+         writetofile(file);
+     	}
+     	catch(Exception esa)
+    	{
 
-             }
-            }
-            
+     	}
 
-    }
-
-    else if (choice == exitI)
-        System.exit(0);
-    else if (choice == cutI)
-    {
-        pad = ta.getSelectedText();
-        ta.replaceRange("", ta.getSelectionStart(), ta.getSelectionEnd());
-    }
-    else if (choice == copyI)
-        pad = ta.getSelectedText();
-    else if (choice == pasteI)
-        ta.insert(pad, ta.getCaretPosition());
-    else if (choice == selectI)
-        ta.selectAll();
+    }    
 }
+else if (choice == exitI)
+    System.exit(0);
+}
+
 public static void main(String[] args) 
 {
-    new Document();
+new Document();
 }
+
 }
