@@ -12,7 +12,7 @@ public class Document extends JFrame implements ActionListener
     private JTextArea ta;
     private int count;
     private JMenuBar menuBar;
-    private JMenu fileM,editM;
+    private JMenu fileM;
     private JScrollPane scpane;
     private JMenuItem exitI,cutI,copyI,pasteI,selectI,saveI,loadI;
     private String pad;
@@ -40,7 +40,7 @@ public class Document extends JFrame implements ActionListener
     ta = new JTextArea(); //textarea
     menuBar = new JMenuBar(); //menubar
     fileM = new JMenu("File"); //file menu
-    editM = new JMenu("Edit"); //edit menu
+    
     scpane = new JScrollPane(ta); //scrollpane  and add textarea to scrollpane
     exitI = new JMenuItem("Exit");
     cutI = new JMenuItem("Cut");
@@ -56,16 +56,12 @@ public class Document extends JFrame implements ActionListener
 
     setJMenuBar(menuBar);
     menuBar.add(fileM);
-    menuBar.add(editM);
+    
 
     fileM.add(saveI);
    
     fileM.add(exitI);
 
-    // editM.add(cutI);
-    // editM.add(copyI);
-    // editM.add(pasteI);        
-    // editM.add(selectI);
 
 
     saveI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
