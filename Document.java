@@ -17,7 +17,7 @@ public class Document extends JFrame implements ActionListener
     private int count;
     private JMenuBar menuBar;
     private JMenu fileM;
-    private JMenuItem exitI,saveI,compileI;
+    private JMenuItem exitI,saveI,compileI,aboutI;
     private String pad;
     private JToolBar toolBar;
 
@@ -39,36 +39,39 @@ public class Document extends JFrame implements ActionListener
 
         count = 0;
         pad = " ";
-ta = new JTextArea(); //textarea
+		ta = new JTextArea(); //textarea
 
-menuBar = new JMenuBar(); //menubar
-fileM = new JMenu("File"); //file menu
-exitI = new JMenuItem("Exit");  //menu items on File Menu
-saveI = new JMenuItem("Save");  //menu items on File Menu
-compileI = new JMenuItem("Compile");
-toolBar = new JToolBar();
+		menuBar = new JMenuBar(); //menubar
+		fileM = new JMenu("File"); //file menu
+		exitI = new JMenuItem("Exit");  //menu items on File Menu
+		saveI = new JMenuItem("Save");  //menu items on File Menu
+		compileI = new JMenuItem("Compile"); //menu items on File Menu
+		aboutI = new JMenuItem("About");
+		toolBar = new JToolBar();
 
-ta.setLineWrap(true);
-ta.setWrapStyleWord(true);
+		ta.setLineWrap(true);
+		ta.setWrapStyleWord(true);
 
-setJMenuBar(menuBar);
-menuBar.add(fileM); // "FILE" on the menu bar
-fileM.add(saveI); // "Save" on the menu item for FILE
-fileM.add(compileI);
-fileM.add(exitI); // "Exit" on the menu item for FILE
+		setJMenuBar(menuBar);
+		menuBar.add(fileM); // "FILE" on the menu bar
+		fileM.add(aboutI); // "About" on the menu bar
+		fileM.add(saveI); // "Save" on the menu item for FILE
+		fileM.add(compileI); // "Complie" on the menu item for FILE
+		fileM.add(exitI); // "Exit" on the menu item for FILE
 
 
-saveI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		saveI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 
-pane.add(toolBar,BorderLayout.SOUTH);
+		pane.add(toolBar,BorderLayout.SOUTH);
 
-saveI.addActionListener(this);
-exitI.addActionListener(this);
-compileI.addActionListener(this);
+		saveI.addActionListener(this);
+		exitI.addActionListener(this);
+		compileI.addActionListener(this);
+		aboutI.addActionListener(this);
 
-setVisible(true);
+		setVisible(true);
 
-}
+	}
 
 void writetofile(File ff) throws Exception
 {
@@ -90,84 +93,82 @@ private static void runProcess(String command) throws Exception {
     printLines(command + "\n============================================================\nOUTPUT:\n\n\n\n", pro.getInputStream());
     printLines(command + " stderr:", pro.getErrorStream());
     pro.waitFor();
-  //  System.out.println(command + " exitValue() " + pro.exitValue());
 }
 
 public void actionPerformed(ActionEvent e) 
 {
-
     JMenuItem choice = (JMenuItem) e.getSource();
 
     if (choice == saveI)
     {
-
        int returnVal = fc.showSaveDialog(Document.this);
 
        if (returnVal == JFileChooser.APPROVE_OPTION) 
        {
-        try
-        {
-           File file = fc.getSelectedFile();
-           writetofile(file);
-       }
-       catch(Exception esa)
-       {
+	       try
+	       {
+	           File file = fc.getSelectedFile();
+	           writetofile(file);
+	       }
+	       catch(Exception esa)
+	       {
 
-       }
+	       }
+ 
+       }    
+   }
+	else if (choice == exitI)
+	{
+       System.exit(0);
+	}
+	else if (choice == compileI)
+	{
+    	Boolean flg=true;
 
-   }    
-}
-else if (choice == exitI)
-    System.exit(0);
-else if (choice == compileI)
-{
-    Boolean flg=true;
+	    do{
+	        String str = JOptionPane.showInputDialog(null, "Enter class name : ", "Text Editor", 1);
+	        if(str != null)
+	        {
+	            if(str.equals(""))
+	            {
+	            JOptionPane.showMessageDialog(null,"ENTER VALID NAME","Text Editor",1);      
+	            }
+	            else
+	            {
+	             try {
+	                flg=false;
+	                File file = new File(str+".java");
+	                FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	                BufferedWriter bw = new BufferedWriter(fw);
+	                bw.write(textArea.getText());
+	                bw.close(); 
+	                Process pro1 = Runtime.getRuntime().exec("javac "+str+".java");
+	                pro1.waitFor();
+	                runProcess("java "+str);
+	            } catch (Exception es) 
+	            {
+	              es.printStackTrace();
+		          }
+		      }
+		  }
+		  else
+		  {
+		    flg=false;
+		    break;
+		  }
 
-    do{
-        String str = JOptionPane.showInputDialog(null, "Enter class name : ", "Text Editor", 1);
-        if(str != null)
-        {
-            if(str.equals(""))
-            {
-            JOptionPane.showMessageDialog(null,"ENTER VALID NAME","Text Editor",1);      
-            }
-            else
-            {
-             try {
-                flg=false;
-                File file = new File(str+".java");
-                FileWriter fw = new FileWriter(file.getAbsoluteFile());
-                BufferedWriter bw = new BufferedWriter(fw);
-                bw.write(textArea.getText());
-                bw.close(); 
-                //runProcess("javac _execute.java");
-                Process pro1 = Runtime.getRuntime().exec("javac "+str+".java");
-                pro1.waitFor();
-                runProcess("java "+str);
-            } catch (Exception es) 
-            {
-              es.printStackTrace();
-          }
-      }
+	  }while(flg==true);
+ }
+ else if(choice == aboutI)
+  {	
+  	 JOptionPane.showMessageDialog(null,"Text Editor in Java. \n\n 2014","Text Editor",1);
   }
-  else
-  {
-    flg=false;
-    break;
-  }
-
-  }while(flg==true);
-                  //  JOptionPane.showMessageDialog(null, "You entered the text : " + str, "Text Editor", 1);
-
-
 
 }
-}
 
-
-public static void main(String[] args) 
-{
-    new Document();
-}
+	public static void main(String[] args) 
+	{
+    	new Document();
+	}
 
 }
